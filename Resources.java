@@ -222,8 +222,10 @@ public class Resources {
             str=str+deleted_file+",";
 
         }
+        if(str.length()>=1){
+            str =str.substring(0,str.length()-1);
+        }
 
-        str =str.substring(0,str.length()-1);
         return str;
 
     }
@@ -242,7 +244,9 @@ public class Resources {
             str=str+(-999)+",";
 
         }
-        str =str.substring(0,str.length()-1);
+        if(str.length()>=1){
+            str =str.substring(0,str.length()-1);
+        }
 
         return str;
 
@@ -311,7 +315,7 @@ public class Resources {
                 File file_obj = new File(file);
                 file_obj.delete();
 
-                if (!filesSize[i].equals("-999")) {
+                if (!filesSize[i].equals("-999") && filesSize[i].length()!=0) {
 
                     int size = Integer.parseInt(filesSize[i]);
                     byteArr = new byte[size];
