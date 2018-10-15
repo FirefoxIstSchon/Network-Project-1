@@ -96,9 +96,9 @@ public class Resources {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ArrayList<Object> result =new ArrayList<Object>();
+
         ArrayList<File> changed_files =new ArrayList<File>();
-        ArrayList<String> deleted_files=new ArrayList<String>(  );
+
         //get current files
         File [] current_files =dir.listFiles();
         int hashcode =0;
@@ -116,11 +116,11 @@ public class Resources {
                 if(hash_table_for_files.containsKey(hashcode))
                 {
 
-                    System.out.println("The file called "+file_entry.getName()+" doesn't changed.");
+                    //System.out.println("The file called "+file_entry.getName()+" doesn't changed.");
 
                 }
                 else {
-                    System.out.println("The file called "+file_entry.getName()+" changed.");
+                    //System.out.println("The file called "+file_entry.getName()+" changed.");
                     changed_files.add(file_entry);
 
                 }
@@ -133,32 +133,9 @@ public class Resources {
 
         //this part is for finding deleted files
         //if it is not empty it means that there are some deleted files. Because we have deleted all modified and unmodified elements before.
-        if(!hash_table_for_files .isEmpty())
-        {
-            System.out.println("Finding deleted files.");
 
-            List<String> list_of_remaining_values = new ArrayList<>(hash_table_for_files.values());
-            //This iteration is for finding the deleted file.
-            boolean check=true;
-            for(String name_of_the_file: list_of_remaining_values)
-            {
-                for(File changed_file: changed_files)
-                {
-                    if(changed_file.getName().contains(name_of_the_file)){
-                        check=false;
-                    }
-                }
-                if(check){
-                    System.out.println(name_of_the_file+" is deleted.");
-                    deleted_files.add(name_of_the_file);
-                }
 
-                check=true;
-            }
 
-        }
-        result.add(changed_files);
-        result.add(deleted_files);
 
         return changed_files;
     }
@@ -168,7 +145,7 @@ public class Resources {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ArrayList<Object> result =new ArrayList<Object>();
+
         ArrayList<File> changed_files =new ArrayList<File>();
         ArrayList<String> deleted_files=new ArrayList<String>(  );
         //get current files
@@ -188,11 +165,11 @@ public class Resources {
                 if(hash_table_for_files.containsKey(hashcode))
                 {
 
-                    System.out.println("The file called "+file_entry.getName()+" doesn't changed.");
+
 
                 }
                 else {
-                    System.out.println("The file called "+file_entry.getName()+" changed.");
+
                     changed_files.add(file_entry);
 
                 }
@@ -207,7 +184,7 @@ public class Resources {
         //if it is not empty it means that there are some deleted files. Because we have deleted all modified and unmodified elements before.
         if(!hash_table_for_files .isEmpty())
         {
-            System.out.println("Finding deleted files.");
+            //System.out.println("Finding deleted files.");
 
             List<String> list_of_remaining_values = new ArrayList<>(hash_table_for_files.values());
             //This iteration is for finding the deleted file.
@@ -221,7 +198,7 @@ public class Resources {
                     }
                 }
                 if(check){
-                    System.out.println(name_of_the_file+" is deleted.");
+                    //System.out.println(name_of_the_file+" is deleted.");
                     deleted_files.add(name_of_the_file);
                 }
 
@@ -229,8 +206,7 @@ public class Resources {
             }
 
         }
-        result.add(changed_files);
-        result.add(deleted_files);
+
 
         return deleted_files;
 
@@ -269,12 +245,12 @@ public class Resources {
         String str ="";
         for(File changed_file: changed_files)
         {
-            str=str+changed_file.getName()+", ";
+            str=str+changed_file.getName()+",";
 
         }
 
 
-        str =str.substring(0,str.length()-2);
+        str =str.substring(0,str.length()-1);
         return str;
 
     }
@@ -284,10 +260,10 @@ public class Resources {
         String str ="";
         for(File changed_file: changed_files)
         {
-            str=str+changed_file.length()+", ";
+            str=str+changed_file.length()+",";
 
         }
-        str =str.substring(0,str.length()-2);
+        str =str.substring(0,str.length()-1);
 
         return str;
 
@@ -316,6 +292,7 @@ public class Resources {
                 bufferedInputStream.read(byteArray, 0, byteArrayLen);
 
                 outputStream = socket.getOutputStream();
+                System.out.println("reach here");
                 outputStream.write(byteArray, 0, byteArrayLen);
                 outputStream.flush();
 
