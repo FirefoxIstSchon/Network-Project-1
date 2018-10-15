@@ -113,7 +113,9 @@ public class Master {
 
         int ctr = timeout / 10;
 
-        for (int i = 1; i < ctr; i++) {
+        new Thread(runner).start();
+
+        /*for (int i = 1; i < ctr; i++) {
 
             new Thread(runner).start();
 
@@ -124,7 +126,7 @@ public class Master {
             } catch (InterruptedException e) {
                 System.out.println("Thread sleep interrupted");
             }
-        }
+        }*/
 
     }
 

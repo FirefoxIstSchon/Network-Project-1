@@ -52,9 +52,9 @@ public class Resources {
 
         //checking if the file already exists
         if(metafile.createNewFile()){
-            System.out.println("File Created");
+            //System.out.println("File Created");
         }else {
-            System.out.println("Metafile already exist");
+            //System.out.println("Metafile already exist");
             //truncating the file if it already exist
             try (FileChannel outChan = new FileOutputStream(metafile, true).getChannel()) {
                 outChan.truncate(0);
@@ -75,7 +75,7 @@ public class Resources {
                 hashcode=file_entry.hashCode();
                 str=str+file_entry.getName()+ " ";
                 if(!str.contains("metafile.txt ")){
-                    System.out.println(file_entry.getName());
+                    //System.out.println(file_entry.getName());
                     str=str+hashcode;
                     printWriter.println(str);
                 }
@@ -206,7 +206,11 @@ public class Resources {
             }
 
         }
-
+        try {
+            create_metafile ();
+        }catch (IOException e){
+            System.out.println("Couldn't create meta file.");
+        }
 
         return deleted_files;
 
@@ -215,28 +219,7 @@ public class Resources {
 
 
     }
-    public static ArrayList <File> get_changes_files1(){
-        // todo : what kinda thing is returned?
 
-        ArrayList<File> files = new ArrayList<>();
-
-        //check if the path resolved to a file
-        try {
-
-            Boolean isFolder = (Boolean) Files.getAttribute(path, "basic:isDirectory");
-            if (!isFolder) {
-                throw new IllegalArgumentException("Path: " + path + " is not a folder");
-            }
-        } catch (IOException ioe) {
-            // Folder does not exists
-            ioe.printStackTrace();
-        }
-
-
-
-
-        return files;
-    }
 
     public static String get_changes_names() {
 
@@ -292,17 +275,17 @@ public class Resources {
                 bufferedInputStream.read(byteArray, 0, byteArrayLen);
 
                 outputStream = socket.getOutputStream();
-                System.out.println("reach here");
+
                 outputStream.write(byteArray, 0, byteArrayLen);
                 outputStream.flush();
 
                 bufferedInputStream.close();
                 fileInputStream.close();
-                outputStream.close();
 
             } catch (Exception e) {
                 System.out.println("Send Error");
             }
+
         }
 
     }
@@ -345,6 +328,8 @@ public class Resources {
                     if (readBytes >= 0) currentPtr += readBytes;
 
                 } while (readBytes > -1);
+
+                System.out.println("reach");
 
                 bufferedOutputStream.write(byteArr, 0 , currentPtr);
                 bufferedOutputStream.flush();
