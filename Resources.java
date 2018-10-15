@@ -294,7 +294,7 @@ public class Resources {
 
             for (int i = 0; i < files.length; i++){
 
-                String file = files[i];
+                String file = path+"test2\\"+files[i];
                 int size = Integer.parseInt(filesSize[i]);
                 byteArr = new byte[size];
 
@@ -303,11 +303,11 @@ public class Resources {
 
                 readBytes = inputStream.read(byteArr,0,byteArr.length);
                 currentPtr = readBytes;
-                System.out.println("reach");
+
                 do {
 
                     int newPtr = byteArr.length - currentPtr;
-                    System.out.println(readBytes);
+
                     readBytes = inputStream.read(byteArr, currentPtr, newPtr);
 
                     if (readBytes > 0) currentPtr += readBytes;
@@ -338,7 +338,7 @@ public class Resources {
 
     public static void main(String[] args) throws IOException,InterruptedException
     {
-/*
+
         //create_metafile();
         get_data_from_metafile ();
         //Thread.sleep(30*1000);
@@ -346,7 +346,6 @@ public class Resources {
         ArrayList<String> test2 = get_deleted_filenames();
         get_changes_names();
         get_changes_sizes();
-*/
 
     }
 

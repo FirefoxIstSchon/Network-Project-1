@@ -80,7 +80,7 @@ public class Master {
 
                     default:
 
-                        System.out.println("Master : Obtained unknown Command.");
+                        System.out.println("Master : Obtained unknown Command." + command);
 
                         break;
                 }
