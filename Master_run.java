@@ -19,7 +19,7 @@ public class Master_run {
 
             // update with follower
 
-            master.start_listening(30);
+            master.sync_with_follower(10);
 
             // update with drive
 
