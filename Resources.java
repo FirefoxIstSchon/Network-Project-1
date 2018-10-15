@@ -15,9 +15,8 @@ import java.io.*;
 
 
 public class Resources {
-
-    public static Path path = Paths.get("C:\\Users\\Berke\\Documents\\School\\Courses\\Comp\\416\\Projects\\P1\\testfolderforsync");
-    public static File dir =new File ("C:\\Users\\Berke\\Documents\\School\\Courses\\Comp\\416\\Projects\\P1\\testfolderforsync");
+    public static String path ="C:\\Users\\Berke\\Documents\\School\\Courses\\Comp\\416\\Projects\\P1\\testfolderforsync\\";
+    public static File dir =new File (path);
     public static Hashtable hash_table_for_files=new Hashtable();
 
     public Resources(){}
@@ -38,7 +37,7 @@ public class Resources {
 
     public static void get_data_from_metafile () throws  IOException
     {
-        File metafile = new File("C:\\Users\\Berke\\Documents\\School\\Courses\\Comp\\416\\Projects\\P1\\testfolderforsync\\metafile.txt");
+        File metafile = new File(path+"metafile.txt");
         Scanner sc = new Scanner(metafile);
         while (sc.hasNextLine()){
             String[] line =sc.nextLine().split(" ");
@@ -48,7 +47,7 @@ public class Resources {
 
     public static void create_metafile ()throws IOException{
         //creating a metafile to store changes
-        File metafile = new File("C:\\Users\\Berke\\Documents\\School\\Courses\\Comp\\416\\Projects\\P1\\testfolderforsync\\metafile.txt");
+        File metafile = new File(path+"metafile.txt");
 
         //checking if the file already exists
         if(metafile.createNewFile()){
@@ -314,7 +313,7 @@ public class Resources {
 
                 } while (readBytes != 0);
 
-                System.out.println("reach");
+                //System.out.println("reach");
 
                 bufferedOutputStream.write(byteArr, 0 , currentPtr);
                 bufferedOutputStream.flush();
