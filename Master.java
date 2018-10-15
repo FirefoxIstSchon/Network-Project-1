@@ -104,6 +104,8 @@ public class Master {
 
     public void start_listening(int timeout) {
 
+        ArrayList<Thread> threads = new ArrayList<>();
+
         Runnable runner = new Runnable() {
             @Override
             public void run() {
@@ -115,20 +117,28 @@ public class Master {
 
         int ctr = timeout / 10;
 
-        new Thread(runner).start();
+        for (int i = 0; i < ctr; i++) {
 
-        /*for (int i = 1; i < ctr; i++) {
-
-            new Thread(runner).start();
+            Thread this_thread = new Thread(runner);
+            this_thread.start();
+            threads.add(this_thread);
 
             if (is_listening) new Thread(runner).start();
 
             try {
                 Thread.sleep(10_000);
             } catch (InterruptedException e) {
-                System.out.println("Thread sleep interrupted");
+                System.out.println("Thread sleep failed.");
             }
-        }*/
+        }
+
+        for (Thread thread : threads){
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                System.out.println("Thread join failed.");
+            }
+        }
 
     }
 
