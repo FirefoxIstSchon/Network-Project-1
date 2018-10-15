@@ -91,6 +91,8 @@ public class Master {
 
             is_listening = false;
 
+            System.out.println("Master : Finished interaction with client.");
+
         } catch (IOException e) {
 
             System.out.println("Master : Transaction failed");

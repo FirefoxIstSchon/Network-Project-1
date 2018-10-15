@@ -48,7 +48,7 @@ public class Resources {
 
     public static void create_metafile ()throws IOException{
         //creating a metafile to store changes
-        File metafile = new File("C:\\Users\\Berke\\Documents\\School\\Courses\\Comp\\416\\Projects\\P1\\testfolderforsync\\metafile");
+        File metafile = new File("C:\\Users\\Berke\\Documents\\School\\Courses\\Comp\\416\\Projects\\P1\\testfolderforsync\\metafile.txt");
 
         //checking if the file already exists
         if(metafile.createNewFile()){
@@ -131,12 +131,6 @@ public class Resources {
             }
         }
 
-        //this part is for finding deleted files
-        //if it is not empty it means that there are some deleted files. Because we have deleted all modified and unmodified elements before.
-
-
-
-
         return changed_files;
     }
     public static ArrayList<String> get_deleted_filenames() {
@@ -162,17 +156,9 @@ public class Resources {
                 //checking whether the file is changed or  not.
                 String filename_hash=(String) hash_table_for_files.get(hashcode);
                 String filename_current=(String) file_entry.getName();
-                if(hash_table_for_files.containsKey(hashcode))
-                {
-
-
-
-                }
-                else {
-
+                if(!hash_table_for_files.containsKey(hashcode))
                     changed_files.add(file_entry);
 
-                }
 
                 hash_table_for_files.remove(hashcode);
 
@@ -206,11 +192,7 @@ public class Resources {
             }
 
         }
-        try {
-            create_metafile ();
-        }catch (IOException e){
-            System.out.println("Couldn't create meta file.");
-        }
+
 
         return deleted_files;
 
@@ -319,15 +301,18 @@ public class Resources {
 
                 readBytes = inputStream.read(byteArr,0,byteArr.length);
                 currentPtr = readBytes;
-
+                System.out.println("reach");
                 do {
 
                     int newPtr = byteArr.length - currentPtr;
+                    System.out.println(readBytes);
                     readBytes = inputStream.read(byteArr, currentPtr, newPtr);
 
-                    if (readBytes >= 0) currentPtr += readBytes;
+                    if (readBytes > 0) currentPtr += readBytes;
 
-                } while (readBytes > -1);
+                    //System.out.println(readBytes);
+
+                } while (readBytes != 0);
 
                 System.out.println("reach");
 
@@ -351,7 +336,7 @@ public class Resources {
 
     public static void main(String[] args) throws IOException,InterruptedException
     {
-
+/*
         //create_metafile();
         get_data_from_metafile ();
         //Thread.sleep(30*1000);
@@ -359,7 +344,7 @@ public class Resources {
         ArrayList<String> test2 = get_deleted_filenames();
         get_changes_names();
         get_changes_sizes();
-
+*/
 
     }
 
