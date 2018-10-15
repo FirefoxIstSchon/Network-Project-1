@@ -15,7 +15,7 @@ import java.io.*;
 
 
 public class Resources {
-    public static String path ="/Users/k/git/Network-Project-1/";
+    public static String path ="C:\\Users\\Berke\\Documents\\School\\Courses\\Comp\\416\\Projects\\P1\\";
     public static String foldername="testfolderforsync\\";
     public static File dir =new File (path+foldername);
     public static Hashtable hash_table_for_files=new Hashtable();
@@ -106,30 +106,31 @@ public class Resources {
         File [] current_files =dir.listFiles();
         int hashcode =0;
 
-        if (current_files != null) {
+        //this part is to find added and modified files
+        for (File file_entry : current_files)
+        {
+            //We dont need to compare metafile
+            if(!file_entry.getName().equals("metafile.txt"))
+            {
+                hashcode=file_entry.hashCode();
+                //checking whether the file is changed or  not.
+                String filename_hash=(String) hash_table_for_files.get(hashcode);
+                String filename_current=(String) file_entry.getName();
+                if(hash_table_for_files.containsKey(hashcode))
+                {
 
-            //this part is to find added and modified files
-            for (File file_entry : current_files) {
-                //We dont need to compare metafile
-                if (!file_entry.getName().equals("metafile.txt")) {
-                    hashcode = file_entry.hashCode();
-                    //checking whether the file is changed or  not.
-                    String filename_hash = (String) hash_table_for_files.get(hashcode);
-                    String filename_current = (String) file_entry.getName();
-                    if (hash_table_for_files.containsKey(hashcode)) {
-
-                        //System.out.println("The file called "+file_entry.getName()+" doesn't changed.");
-
-                    } else {
-                        //System.out.println("The file called "+file_entry.getName()+" changed.");
-                        changed_files.add(file_entry);
-
-                    }
-
-                    hash_table_for_files.remove(hashcode);
-
+                    //System.out.println("The file called "+file_entry.getName()+" doesn't changed.");
 
                 }
+                else {
+                    //System.out.println("The file called "+file_entry.getName()+" changed.");
+                    changed_files.add(file_entry);
+
+                }
+
+                hash_table_for_files.remove(hashcode);
+
+
             }
         }
 
@@ -148,24 +149,23 @@ public class Resources {
         File [] current_files =dir.listFiles();
         int hashcode =0;
 
-        if (current_files != null) {
-
-            //this part is to find added and modified files
-            for (File file_entry : current_files) {
-                //We dont need to compare metafile
-                if (!file_entry.getName().equals("metafile.txt")) {
-                    hashcode = file_entry.hashCode();
-                    //checking whether the file is changed or  not.
-                    String filename_hash = (String) hash_table_for_files.get(hashcode);
-                    String filename_current = (String) file_entry.getName();
-                    if (!hash_table_for_files.containsKey(hashcode))
-                        changed_files.add(file_entry);
-
-
-                    hash_table_for_files.remove(hashcode);
+        //this part is to find added and modified files
+        for (File file_entry : current_files)
+        {
+            //We dont need to compare metafile
+            if(!file_entry.getName().equals("metafile.txt"))
+            {
+                hashcode=file_entry.hashCode();
+                //checking whether the file is changed or  not.
+                String filename_hash=(String) hash_table_for_files.get(hashcode);
+                String filename_current=(String) file_entry.getName();
+                if(!hash_table_for_files.containsKey(hashcode))
+                    changed_files.add(file_entry);
 
 
-                }
+                hash_table_for_files.remove(hashcode);
+
+
             }
         }
 
@@ -222,8 +222,10 @@ public class Resources {
             str=str+deleted_file+",";
 
         }
+        if(str.length()>=1){
+            str =str.substring(0,str.length()-1);
+        }
 
-        if (str.length()-1 > -1) str =str.substring(0,str.length()-1);
         return str;
 
     }
@@ -242,8 +244,10 @@ public class Resources {
             str=str+(-999)+",";
 
         }
+        if(str.length()>=1){
+            str =str.substring(0,str.length()-1);
+        }
 
-        if (str.length()-1 > -1) str =str.substring(0,str.length()-1);
         return str;
 
     }
@@ -311,7 +315,7 @@ public class Resources {
                 File file_obj = new File(file);
                 file_obj.delete();
 
-                if (!filesSize[i].equals("-999")) {
+                if (!filesSize[i].equals("-999") && filesSize[i].length()!=0) {
 
                     int size = Integer.parseInt(filesSize[i]);
                     byteArr = new byte[size];
