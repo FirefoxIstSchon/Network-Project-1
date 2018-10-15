@@ -295,34 +295,42 @@ public class Resources {
             for (int i = 0; i < files.length; i++){
 
                 String file = path+"test2\\"+files[i];
-                int size = Integer.parseInt(filesSize[i]);
-                byteArr = new byte[size];
 
-                fileOutputStream = new FileOutputStream(file);
-                bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
+                File file_obj = new File(file);
+                file_obj.delete();
 
-                readBytes = inputStream.read(byteArr,0,byteArr.length);
-                currentPtr = readBytes;
+                if (!filesSize[i].equals("-999")) {
 
-                do {
+                    int size = Integer.parseInt(filesSize[i]);
+                    byteArr = new byte[size];
 
-                    int newPtr = byteArr.length - currentPtr;
+                    fileOutputStream = new FileOutputStream(file);
+                    bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
 
-                    readBytes = inputStream.read(byteArr, currentPtr, newPtr);
+                    readBytes = inputStream.read(byteArr, 0, byteArr.length);
+                    currentPtr = readBytes;
 
-                    if (readBytes > 0) currentPtr += readBytes;
+                    do {
 
-                    //System.out.println(readBytes);
+                        int newPtr = byteArr.length - currentPtr;
 
-                } while (readBytes != 0);
+                        readBytes = inputStream.read(byteArr, currentPtr, newPtr);
 
-                //System.out.println("reach");
+                        if (readBytes > 0) currentPtr += readBytes;
 
-                bufferedOutputStream.write(byteArr, 0 , currentPtr);
-                bufferedOutputStream.flush();
+                        //System.out.println(readBytes);
 
-                bufferedOutputStream.close();
-                fileOutputStream.close();
+                    } while (readBytes != 0);
+
+                    //System.out.println("reach");
+
+                    bufferedOutputStream.write(byteArr, 0, currentPtr);
+                    bufferedOutputStream.flush();
+
+                    bufferedOutputStream.close();
+                    fileOutputStream.close();
+
+                }
 
             }
 
