@@ -15,8 +15,9 @@ import java.io.*;
 
 
 public class Resources {
-    public static String path ="C:\\Users\\Berke\\Documents\\School\\Courses\\Comp\\416\\Projects\\P1\\testfolderforsync\\";
-    public static File dir =new File (path);
+    public static String path ="C:\\Users\\Berke\\Documents\\School\\Courses\\Comp\\416\\Projects\\P1\\";
+    public static String foldername="testfolderforsync\\";
+    public static File dir =new File (path+foldername);
     public static Hashtable hash_table_for_files=new Hashtable();
 
     public Resources(){}
@@ -37,7 +38,7 @@ public class Resources {
 
     public static void get_data_from_metafile () throws  IOException
     {
-        File metafile = new File(path+"metafile.txt");
+        File metafile = new File(path+ foldername+"metafile.txt");
         if(metafile.createNewFile()){
             //System.out.println("File Created");
         }
@@ -50,7 +51,7 @@ public class Resources {
 
     public static void create_metafile ()throws IOException{
         //creating a metafile to store changes
-        File metafile = new File(path+"metafile.txt");
+        File metafile = new File(path+foldername+"metafile.txt");
 
         //checking if the file already exists
         if(metafile.createNewFile()){
@@ -209,13 +210,18 @@ public class Resources {
 
 
         ArrayList<File> changed_files =get_changes_files();
+        ArrayList<String> deleted_files =get_deleted_filenames();
         String str ="";
         for(File changed_file: changed_files)
         {
             str=str+changed_file.getName()+",";
 
         }
+        for(String deleted_file: deleted_files)
+        {
+            str=str+deleted_file+",";
 
+        }
 
         str =str.substring(0,str.length()-1);
         return str;
@@ -224,10 +230,16 @@ public class Resources {
 
     public static String get_changes_sizes() {
         ArrayList<File> changed_files = get_changes_files();
+        ArrayList<String> deleted_files =get_deleted_filenames();
         String str ="";
         for(File changed_file: changed_files)
         {
             str=str+changed_file.length()+",";
+
+        }
+        for(String deleted_file: deleted_files)
+        {
+            str=str+(-999)+",";
 
         }
         str =str.substring(0,str.length()-1);
@@ -267,7 +279,7 @@ public class Resources {
                 fileInputStream.close();
 
             } catch (Exception e) {
-                System.out.println("Send Error");
+                System.out.println("Send Error:"+e);
             }
 
         }
