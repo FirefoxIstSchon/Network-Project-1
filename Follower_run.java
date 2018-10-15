@@ -1,3 +1,5 @@
+import java.io.IOException;
+
 public class Follower_run {
 
 
@@ -36,6 +38,14 @@ public class Follower_run {
             receive();
 
             // end connection
+
+            try {
+
+                Resources.create_metafile();
+
+            } catch (IOException e) {
+                System.out.println("Follower : could not create metafile.");
+            }
 
             follower.send_command("ClientDone");
 

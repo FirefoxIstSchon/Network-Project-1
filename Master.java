@@ -67,7 +67,7 @@ public class Master {
 //        }).start();
 
 
-
+        boolean check_cond;
 
         do {
 
@@ -86,11 +86,12 @@ public class Master {
 
             lastFollower = followers.get(followers.size()-1);
 
-            if (lastFollower.socket != null
-                    && lastFollower.socket.isConnected()) follower_count +=1;
+            check_cond = lastFollower.socket != null
+                    && lastFollower.socket.isConnected();
 
-        } while(lastFollower.socket != null
-                && lastFollower.socket.isConnected());
+            if (check_cond) follower_count +=1;
+
+        } while(check_cond);
 
         // handle existing threads
 
@@ -187,7 +188,7 @@ class Command_Listener implements Runnable{
 
             }
 
-            System.out.println("Master : Finished interaction with client.");
+            System.out.println("Master : finished interaction with client.");
 
         } catch (IOException e) {
 

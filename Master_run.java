@@ -1,3 +1,5 @@
+import java.io.IOException;
+
 public class Master_run {
 
 
@@ -40,6 +42,14 @@ public class Master_run {
             // end connection
 
             // master.terminate_connection();
+
+            try {
+
+                Resources.create_metafile();
+
+            } catch (IOException e) {
+                System.out.println("Master : could not create metafile.");
+            }
 
         }
 
