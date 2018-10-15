@@ -105,34 +105,37 @@ public class Resources {
         //get current files
         File [] current_files =dir.listFiles();
         int hashcode =0;
+        if (current_files != null) {
+            //this part is to find added and modified files
 
-        //this part is to find added and modified files
-        for (File file_entry : current_files)
-        {
-            //We dont need to compare metafile
-            if(!file_entry.getName().equals("metafile.txt"))
+            for (File file_entry : current_files)
             {
-                hashcode=file_entry.hashCode();
-                //checking whether the file is changed or  not.
-                String filename_hash=(String) hash_table_for_files.get(hashcode);
-                String filename_current=(String) file_entry.getName();
-                if(hash_table_for_files.containsKey(hashcode))
+                //We dont need to compare metafile
+                if(!file_entry.getName().equals("metafile.txt"))
                 {
+                    hashcode=file_entry.hashCode();
+                    //checking whether the file is changed or  not.
+                    String filename_hash=(String) hash_table_for_files.get(hashcode);
+                    String filename_current=(String) file_entry.getName();
+                    if(hash_table_for_files.containsKey(hashcode))
+                    {
 
-                    //System.out.println("The file called "+file_entry.getName()+" doesn't changed.");
+                        //System.out.println("The file called "+file_entry.getName()+" doesn't changed.");
+
+                    }
+                    else {
+                        //System.out.println("The file called "+file_entry.getName()+" changed.");
+                        changed_files.add(file_entry);
+
+                    }
+
+                    hash_table_for_files.remove(hashcode);
+
 
                 }
-                else {
-                    //System.out.println("The file called "+file_entry.getName()+" changed.");
-                    changed_files.add(file_entry);
-
-                }
-
-                hash_table_for_files.remove(hashcode);
-
-
             }
         }
+
 
         return changed_files;
     }
@@ -148,26 +151,29 @@ public class Resources {
         //get current files
         File [] current_files =dir.listFiles();
         int hashcode =0;
-
-        //this part is to find added and modified files
-        for (File file_entry : current_files)
-        {
-            //We dont need to compare metafile
-            if(!file_entry.getName().equals("metafile.txt"))
+        if (current_files != null) {
+            for (File file_entry : current_files)
             {
-                hashcode=file_entry.hashCode();
-                //checking whether the file is changed or  not.
-                String filename_hash=(String) hash_table_for_files.get(hashcode);
-                String filename_current=(String) file_entry.getName();
-                if(!hash_table_for_files.containsKey(hashcode))
-                    changed_files.add(file_entry);
+                //this part is to find added and modified files
+                //We dont need to compare metafile
+                if(!file_entry.getName().equals("metafile.txt"))
+                {
+                    hashcode=file_entry.hashCode();
+                    //checking whether the file is changed or  not.
+                    String filename_hash=(String) hash_table_for_files.get(hashcode);
+                    String filename_current=(String) file_entry.getName();
+                    if(!hash_table_for_files.containsKey(hashcode))
+                        changed_files.add(file_entry);
 
 
-                hash_table_for_files.remove(hashcode);
+                    hash_table_for_files.remove(hashcode);
 
 
+                }
             }
+
         }
+
 
         //this part is for finding deleted files
         //if it is not empty it means that there are some deleted files. Because we have deleted all modified and unmodified elements before.
