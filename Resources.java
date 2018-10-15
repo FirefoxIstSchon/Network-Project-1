@@ -38,6 +38,9 @@ public class Resources {
     public static void get_data_from_metafile () throws  IOException
     {
         File metafile = new File(path+"metafile.txt");
+        if(metafile.createNewFile()){
+            //System.out.println("File Created");
+        }
         Scanner sc = new Scanner(metafile);
         while (sc.hasNextLine()){
             String[] line =sc.nextLine().split(" ");
