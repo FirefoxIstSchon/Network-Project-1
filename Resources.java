@@ -258,6 +258,26 @@ public class Resources {
 
     }
 
+    public static String get_checksums(){
+
+        String str = "";
+
+        // todo
+        // not todo for deleted files
+
+        return str;
+    }
+
+    public static String get_checksum_for(String filename){
+
+        String str = "";
+
+        // todo
+
+        return str;
+
+    }
+
 
 
 
@@ -296,7 +316,7 @@ public class Resources {
 
     }
 
-    public static void receive_files(Socket socket, String filesToReceive, String size_filesToReceive) {
+    public static boolean receive_files(Socket socket, String filesToReceive, String size_filesToReceive, String fileChecksums) {
 
         InputStream inputStream;
         FileOutputStream fileOutputStream;
@@ -304,6 +324,7 @@ public class Resources {
 
         String[] files = filesToReceive.split(",");
         String[] filesSize = size_filesToReceive.split(",");
+        String[] fileCs = fileChecksums.split(",");
 
         int currentPtr = 0;
         int readBytes;
@@ -316,9 +337,10 @@ public class Resources {
 
             for (int i = 0; i < files.length; i++){
 
-                String file = path+"test2\\"+files[i];
+                String file = files[i];
+                String file_path = path+"test2/"+file;
 
-                File file_obj = new File(file);
+                File file_obj = new File(file_path);
                 file_obj.delete();
 
                 if (!filesSize[i].equals("-999") && filesSize[i].length()!=0) {
@@ -326,7 +348,7 @@ public class Resources {
                     int size = Integer.parseInt(filesSize[i]);
                     byteArr = new byte[size];
 
-                    fileOutputStream = new FileOutputStream(file);
+                    fileOutputStream = new FileOutputStream(file_path);
                     bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
 
                     readBytes = inputStream.read(byteArr, 0, byteArr.length);
@@ -352,13 +374,22 @@ public class Resources {
                     bufferedOutputStream.close();
                     fileOutputStream.close();
 
+                    String this_checksum = Resources.get_checksum_for(file);
+                    String that_checksum = fileCs[i];
+
+                    if (!this_checksum.equals(that_checksum)) return false;
+
                 }
 
             }
 
+            return true;
+
         } catch (IOException e) {
             System.out.println("Receive Error");
         }
+
+        return false;
 
     }
 

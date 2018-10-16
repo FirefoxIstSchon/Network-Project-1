@@ -160,8 +160,29 @@ class Command_Listener implements Runnable{
 
                         String filesToReceive = reader.readLine();
                         String size_filesToReceive = reader.readLine();
+                        String checksum_filesToReceive = reader.readLine();
 
-                        Resources.receive_files(socket, filesToReceive, size_filesToReceive);
+//                        boolean success;
+//
+//                        do {
+//
+//                            success = Resources.receive_files(socket, filesToReceive, size_filesToReceive, checksum_filesToReceive);
+//                            if (success) {
+//
+//                                writer.println("MasterReceived");
+//                                writer.flush();
+//
+//                            }
+//
+//                        } while (!success);
+
+                        if (Resources.receive_files(
+                                socket,
+                                filesToReceive,
+                                size_filesToReceive,
+                                checksum_filesToReceive
+                            )
+                        ) { writer.println("MasterReceived") ; writer.flush() ; }
 
                         break;
 
@@ -171,6 +192,7 @@ class Command_Listener implements Runnable{
 
                         writer.println(Resources.get_changes_names());
                         writer.println(Resources.get_changes_sizes());
+                        writer.println(Resources.get_checksums());
                         writer.flush();
 
                         Resources.send_files(socket, Resources.get_changes_files());
@@ -179,7 +201,7 @@ class Command_Listener implements Runnable{
 
                     default:
 
-                        System.out.println("Master : Obtained unknown Command." + command);
+                        System.out.println("Master : Obtained unknown Command ;" + command);
 
                         break;
                 }

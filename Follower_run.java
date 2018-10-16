@@ -58,28 +58,44 @@ public class Follower_run {
 
     public static void send() {
 
-        System.out.println("Follower : is sending..");
+        do {
 
-        String command = "ClientSend";
-        follower.send_command(command);
-        follower.send_command(Resources.get_changes_names());
-        follower.send_command(Resources.get_changes_sizes());
+            System.out.println("Follower : is sending..");
 
-        Resources.send_files(follower.socket, Resources.get_changes_files());
+            String command = "ClientSend";
+            follower.send_command(command);
+            follower.send_command(Resources.get_changes_names());
+            follower.send_command(Resources.get_changes_sizes());
+            follower.send_command(Resources.get_checksums());
+
+            Resources.send_files(follower.socket, Resources.get_changes_files());
+
+        } while (!follower.get_response().equals("MasterReceived"));
 
     }
 
 
     public static void receive() {
 
-        System.out.println("Follower : is receiving..");
+        boolean success;
 
-        String command = "ClientReceive";
-        follower.send_command(command);
-        String filesToReceive = follower.get_response();
-        String size_filesToReceive = follower.get_response();
+        do {
 
-        Resources.receive_files(follower.socket, filesToReceive, size_filesToReceive);
+            System.out.println("Follower : is receiving..");
+
+            String command = "ClientReceive";
+            follower.send_command(command);
+            String filesToReceive = follower.get_response();
+            String size_filesToReceive = follower.get_response();
+            String fileChecksums = follower.get_response();
+
+            success = Resources.receive_files(
+                    follower.socket,
+                    filesToReceive,
+                    size_filesToReceive,
+                    fileChecksums);
+
+        } while (!success);
 
     }
 
