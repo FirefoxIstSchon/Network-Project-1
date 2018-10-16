@@ -7,13 +7,16 @@ import java.util.ArrayList;
 public class Master {
 
 
-    ServerSocket serverSocket;
+    ServerSocket serverSocket_files;
+    ServerSocket serverSocket_commands;
 
-    int SERVER_PORT;
+    int SERVER_PORT_files;
+    int SERVER_PORT_commands;
 
 
-    public Master(int SERVER_PORT){
-        this.SERVER_PORT = SERVER_PORT;
+    public Master(int SERVER_PORT_files, int SERVER_PORT_commands){
+        this.SERVER_PORT_files = SERVER_PORT_files;
+        this.SERVER_PORT_commands = SERVER_PORT_commands;
     }
 
 
@@ -21,7 +24,8 @@ public class Master {
 
         try {
 
-            serverSocket = new ServerSocket(SERVER_PORT);
+            serverSocket_files = new ServerSocket(SERVER_PORT_files);
+            serverSocket_commands = new ServerSocket(SERVER_PORT_commands);
 
         } catch (IOException e) {
 
@@ -52,7 +56,7 @@ public class Master {
 
                 while(true) {
 
-                    Command_Listener follower_listener = new Command_Listener(serverSocket);
+                    Command_Listener follower_listener = new Command_Listener(serverSocket_commands, serverSocket_files);
                     Thread this_thread = new Thread(follower_listener);
 
                     this_thread.start();
@@ -67,8 +71,11 @@ public class Master {
 
                     lastFollower = followers.get(followers.size()-1);
 
-                    check_cond = lastFollower.socket != null
-                            && lastFollower.socket.isConnected();
+                    check_cond =
+                            lastFollower.socket_commands != null &&
+                                    lastFollower.serverSocket_files != null &&
+                                    lastFollower.socket_files.isConnected() &&
+                                    lastFollower.socket_commands.isConnected();
 
                     if (check_cond) follower_count +=1;
 
@@ -121,7 +128,10 @@ public class Master {
 
         try {
 
-            if (serverSocket != null){serverSocket.close();}
+            if (serverSocket_files != null){
+                serverSocket_files.close();}
+            if (serverSocket_commands != null){
+                serverSocket_commands.close();}
 
         } catch (IOException e) {
 
@@ -140,23 +150,30 @@ public class Master {
 
 class Command_Listener implements Runnable{
 
-    ServerSocket serverSocket;
+    ServerSocket serverSocket_files;
+    ServerSocket serverSocket_commands;
 
     BufferedReader reader;
     PrintWriter writer;
-    Socket socket;
+    Socket socket_files;
+    Socket socket_commands;
 
 
-    public Command_Listener(ServerSocket serverSocket){ this.serverSocket = serverSocket; }
+    public Command_Listener(ServerSocket serverSocket_files, ServerSocket serverSocket_commands){
+        this.serverSocket_files = serverSocket_files;
+        this.serverSocket_commands = serverSocket_commands;
+    }
 
     @Override
     public void run() {
 
         try {
 
-            socket = serverSocket.accept();
-            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            writer = new PrintWriter(socket.getOutputStream());
+            socket_files = serverSocket_files.accept();
+            socket_commands = serverSocket_commands.accept();
+
+            reader = new BufferedReader(new InputStreamReader(socket_commands.getInputStream()));
+            writer = new PrintWriter(socket_files.getOutputStream());
 
             String command = reader.readLine();
 
@@ -188,7 +205,7 @@ class Command_Listener implements Runnable{
 //                        } while (!success);
 
                         if (Resources.receive_files(
-                                socket,
+                                socket_files,
                                 filesToReceive,
                                 size_filesToReceive,
                                 checksum_filesToReceive
@@ -209,7 +226,7 @@ class Command_Listener implements Runnable{
                         writer.println(Resources.get_checksums());
                         writer.flush();
 
-                        Resources.send_files(socket, Resources.get_changes_files());
+                        Resources.send_files(socket_files, Resources.get_changes_files());
 
                         try {
 

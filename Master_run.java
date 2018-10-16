@@ -4,15 +4,16 @@ import java.io.IOException;
 public class Master_run {
 
 
-    static int SERVER_PORT = 4444;
+    static int SERVER_PORT_files = 4444;
+    static int SERVER_PORT_commands = 4443;
 
 
     public static void main(String[] args){
 
-        Master master = new Master(SERVER_PORT);
+        Master master = new Master(SERVER_PORT_files, SERVER_PORT_commands);
         master.initialize_connection();
 
-        if (master.serverSocket == null) {
+        if (master.serverSocket_files == null || master.serverSocket_commands == null) {
 
             System.out.println("Master : connectivity is not established.");
 
