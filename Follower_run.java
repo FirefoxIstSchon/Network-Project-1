@@ -74,7 +74,6 @@ class Master_Connecter implements Runnable{
                     follower.send_command(command);
                     follower.send_command(Resources.get_changes_names());
                     follower.send_command(Resources.get_changes_sizes());
-                    follower.send_command(Resources.get_checksums());
 
                     //send changes until success
 
@@ -105,15 +104,13 @@ class Master_Connecter implements Runnable{
                 follower.send_command(command);
                 String filesToReceive = follower.get_response();
                 String size_filesToReceive = follower.get_response();
-                String fileChecksums = follower.get_response();
 
                 //ask for changes until success
 
                 success = Resources.receive_files(
                         follower.socket,
                         filesToReceive,
-                        size_filesToReceive,
-                        fileChecksums);
+                        size_filesToReceive);
 
             } while (!success);
 
