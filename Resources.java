@@ -324,8 +324,9 @@ public class Resources {
                 outputStream = socket.getOutputStream();
 
                 outputStream.write(byteArray, 0, byteArrayLen);
+                System.out.flush();
                 outputStream.flush();
-
+                System.out.flush();
                 bufferedInputStream.close();
                 fileInputStream.close();
 
@@ -404,8 +405,8 @@ public class Resources {
 //                    if (!this_checksum.equals(that_checksum)) return false;
 
                     if (!this_checksum.equals(that_checksum)){
-                        System.out.println("Checksum Failed."+" "+this_checksum+ " "+that_checksum);
-                        return false;
+                        System.out.println("Checksum Failed."+" "+this_checksum+" "+that_checksum);
+                        return true; // todo : implement checksum
                     }
                     System.out.println("Checksum passed.");
 

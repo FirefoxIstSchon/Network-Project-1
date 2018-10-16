@@ -192,8 +192,21 @@ class Command_Listener implements Runnable{
                                 size_filesToReceive,
                                 checksum_filesToReceive
                             )
-                        ) { writer.println("MasterReceived"); }
-                        else { writer.println(); }
+                        ) {
+                            writer.println("MasterReceived");
+
+                            try {
+
+                                Resources.create_metafile();
+
+                            } catch (IOException e) {
+
+                                System.out.println("Master : could not create metafile.");
+
+                            }
+
+                        }
+                        else { writer.println(""); }
 
                         writer.flush();
 
