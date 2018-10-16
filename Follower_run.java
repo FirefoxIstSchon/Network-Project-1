@@ -72,7 +72,7 @@ public class Follower_run {
             Resources.send_files(follower.socket, Resources.get_changes_files());
 
         } while (!follower.get_response().equals("MasterReceived"));
-
+        System.out.flush();
     }
 
 
@@ -85,6 +85,7 @@ public class Follower_run {
             System.out.println("Follower : is receiving..");
 
             String command = "ClientReceive";
+
             follower.send_command(command);
             String filesToReceive = follower.get_response();
             String size_filesToReceive = follower.get_response();

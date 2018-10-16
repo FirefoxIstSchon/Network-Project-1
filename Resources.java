@@ -322,7 +322,6 @@ public class Resources {
                 bufferedInputStream.read(byteArray, 0, byteArrayLen);
 
                 outputStream = socket.getOutputStream();
-
                 outputStream.write(byteArray, 0, byteArrayLen);
                 System.out.flush();
                 outputStream.flush();
@@ -394,8 +393,8 @@ public class Resources {
                     } while (readBytes != 0);
 
                     System.out.println("Received file.");
-
                     bufferedOutputStream.write(byteArr, 0, currentPtr);
+
                     bufferedOutputStream.flush();
 
                     bufferedOutputStream.close();
@@ -403,12 +402,11 @@ public class Resources {
 
                     String this_checksum = Resources.get_checksum_for(file);
                     String that_checksum = fileCs[i];
-
 //                    if (!this_checksum.equals(that_checksum)) return false;
 
                     if (!this_checksum.equals(that_checksum)){
                         System.out.println("Checksum Failed."+" "+this_checksum+" "+that_checksum);
-                        return true; // todo : implement checksum
+                        //return true; // todo : implement checksum
                     }
                     System.out.println("Checksum passed.");
 
