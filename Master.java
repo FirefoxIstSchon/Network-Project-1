@@ -172,6 +172,7 @@ class Command_Listener implements Runnable{
                         String size_filesToReceive = reader.readLine();
                         String checksum_filesToReceive = reader.readLine();
 
+
 //                        boolean success;
 //
 //                        do {
@@ -192,20 +193,7 @@ class Command_Listener implements Runnable{
                                 size_filesToReceive,
                                 checksum_filesToReceive
                             )
-                        ) {
-                            writer.println("MasterReceived");
-
-                            try {
-
-                                Resources.create_metafile();
-
-                            } catch (IOException e) {
-
-                                System.out.println("Master : could not create metafile.");
-
-                            }
-
-                        }
+                        ) { writer.println("MasterReceived"); }
                         else { writer.println(""); }
 
                         writer.flush();
