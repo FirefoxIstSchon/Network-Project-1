@@ -15,8 +15,8 @@ import java.io.*;
 
 
 public class Resources {
-    public static String path ="/Users/k/git/Network-Project-1/";
-    public static String foldername="testfolderforsync/";
+    public static String path ="C:\\Users\\Berke\\Documents\\School\\Courses\\Comp\\416\\Projects\\P1\\";
+    public static String foldername="testfolderforsync\\";
     public static File dir =new File (path+foldername);
     public static Hashtable hash_table_for_files=new Hashtable();
 
@@ -260,18 +260,40 @@ public class Resources {
 
     public static String get_checksums(){
 
-        String str = "";
+        ArrayList<File> changed_files = get_changes_files();
 
-        // todo ; only of valid files
+        String str ="";
+        for(File changed_file: changed_files)
+        {
+            str=str+changed_file.hashCode()+",";
+
+        }
+
+        if(str.length()>=1){
+            str =str.substring(0,str.length()-1);
+        }
 
         return str;
+
+
     }
 
     public static String get_checksum_for(String filename){
 
-        String str = "";
+        ArrayList<File> changed_files = get_changes_files();
 
-        // todo
+        String str ="";
+        for(File changed_file: changed_files)
+        {
+            if(changed_file.getName().equals(filename)){
+                str=str+changed_file.hashCode();
+            }
+
+        }
+
+        if(str.length()>=1){
+            str =str.substring(0,str.length()-1);
+        }
 
         return str;
 
