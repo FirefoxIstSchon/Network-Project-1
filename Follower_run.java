@@ -70,7 +70,7 @@ public class Follower_run {
             follower.send_command(Resources.get_checksums());
 
             Resources.send_files(follower.socket, Resources.get_changes_files());
-
+            System.out.println("Follower send files.");
         } while (!follower.get_response().equals("MasterReceived"));
         System.out.flush();
     }

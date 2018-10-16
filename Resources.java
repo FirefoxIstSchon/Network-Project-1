@@ -15,8 +15,8 @@ import java.io.*;
 
 
 public class Resources {
-    public static String path ="/Users/k/git/Network-Project-1/";
-    public static String foldername="testfolderforsync/";
+    public static String path ="C:\\Users\\Berke\\Documents\\School\\Courses\\Comp\\416\\Projects\\P1\\";
+    public static String foldername="testfolderforsync\\";
     public static File dir =new File (path+foldername);
     public static Hashtable hash_table_for_files=new Hashtable();
 
@@ -407,7 +407,7 @@ public class Resources {
                     if (!this_checksum.equals(that_checksum)){
                         System.out.println("Checksum Failed."+" "+this_checksum+" "+that_checksum);
                         //return true; // todo : implement checksum
-                    }
+                }
                     System.out.println("Checksum passed.");
 
                 }
