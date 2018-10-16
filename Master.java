@@ -223,6 +223,16 @@ class Command_Listener implements Runnable{
 
                         Resources.send_files(socket, Resources.get_changes_files());
 
+                        try {
+
+                            Resources.create_metafile();
+
+                        } catch (IOException e) {
+
+                            System.out.println("Master : could not create metafile.");
+
+                        }
+
                         break;
 
                     default:
@@ -237,16 +247,6 @@ class Command_Listener implements Runnable{
             }
 
             System.out.println("Master : finished interaction with client.");
-
-            try {
-
-                Resources.create_metafile();
-
-            } catch (IOException e) {
-
-                System.out.println("Master : could not create metafile.");
-
-            }
 
         } catch (IOException e) {
 
