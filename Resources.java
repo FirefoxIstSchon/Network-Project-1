@@ -111,7 +111,7 @@ public class Resources {
             for (File file_entry : current_files)
             {
                 //We dont need to compare metafile
-                if(!file_entry.getName().equals("metafile.txt"))
+                if(!file_entry.getName().equals("metafile.txt")&&!file_entry.getName().equals(".DS_Store"))
                 {
                     hashcode=file_entry.hashCode();
                     //checking whether the file is changed or  not.
@@ -156,7 +156,7 @@ public class Resources {
             {
                 //this part is to find added and modified files
                 //We dont need to compare metafile
-                if(!file_entry.getName().equals("metafile.txt"))
+                if(!file_entry.getName().equals("metafile.txt")&&!file_entry.getName().equals(".DS_Store"))
                 {
                     hashcode=file_entry.hashCode();
                     //checking whether the file is changed or  not.
