@@ -15,17 +15,16 @@ import java.io.*;
 
 
 public class Resources {
-    public static String path ="C:\\Users\\Berke\\Desktop\\";
-    public static String foldername="DriveCloud\\";
-    public static File dir =new File (path+foldername);
-    public static Hashtable hash_table_for_files=new Hashtable();
-
+    public static String path = "/Users/k/git/Network-Project-1/";
+    public static String foldername = "testfolderforsync/";
+    public static File dir = new File (path+foldername);
+    public static Hashtable hash_table_for_files = new Hashtable();
 
     public Resources(){}
 
-    public static Boolean is_changed()
+    public static Boolean is_changed(){
 
-    {
+        // changes if any file is changed
 
         ArrayList temp= get_changes_files();
         ArrayList<File> changed_files =get_changes_files();
@@ -39,8 +38,12 @@ public class Resources {
 
     }
 
+
     public static void get_data_from_metafile () throws  IOException
     {
+
+        // reads the metafile and checks the current status for changes
+
         File metafile = new File(path+ foldername+"metafile.txt");
         if(metafile.createNewFile()){
             //System.out.println("File Created");
@@ -52,40 +55,48 @@ public class Resources {
         }
     }
 
+
     public static void create_metafile ()throws IOException{
+
         //creating a metafile to store changes
+
         File metafile = new File(path+foldername+"metafile.txt");
 
         //checking if the file already exists
-        if(metafile.createNewFile()){
-            //System.out.println("File Created");
-        }else {
-            //System.out.println("Metafile already exist");
-            //truncating the file if it already exist
+
+        if (!metafile.createNewFile()) {
+
+            // truncating the file if it already exist
+
             try (FileChannel outChan = new FileOutputStream(metafile, true).getChannel()) {
                 outChan.truncate(0);
             }
         }
 
-        //file operations to print on file
-        File [] files =dir.listFiles();
+        // update the metafile information
+
+        File [] files = dir.listFiles();
         FileWriter fileWriter = new FileWriter(metafile);
         PrintWriter printWriter = new PrintWriter(fileWriter);
-        int hashcode=-1;
-        String str="";
+        int hashcode = -1;
+        String str = "";
         for (File file_entry : files)
         {
             {
 
-                //adding hashcode to the meta file to compare files later on
+                // adding hashcode to the meta file to compare files later on
+
                 hashcode=file_entry.hashCode();
                 str=str+file_entry.getName()+ " ";
                 if(!str.contains("metafile.txt")&&!str.contains(".DS_Store")){
+
                     //System.out.println(file_entry.getName());
+
                     str=str+hashcode;
                     printWriter.println(str);
+
                 }
-                str="";
+                str = "";
             }
         }
         printWriter.close();
@@ -93,10 +104,10 @@ public class Resources {
 
     }
 
+
     public static ArrayList<File> get_changes_files() {
 
 
-        // todo : what kinda thing is returned?
         try {
             get_data_from_metafile ();
         } catch (IOException e) {
@@ -106,43 +117,45 @@ public class Resources {
         ArrayList<File> changed_files =new ArrayList<File>();
 
         //get current files
+
         File [] current_files =dir.listFiles();
-        int hashcode =0;
+        int hashcode = 0;
         if (current_files != null) {
+
             //this part is to find added and modified files
 
             for (File file_entry : current_files)
             {
                 //We dont need to compare metafile
+
                 if(!file_entry.getName().equals("metafile.txt")&&!file_entry.getName().equals(".DS_Store"))
                 {
                     hashcode=file_entry.hashCode();
+
                     //checking whether the file is changed or  not.
-                    String filename_hash=(String) hash_table_for_files.get(hashcode);
-                    String filename_current=(String) file_entry.getName();
-                    if(hash_table_for_files.containsKey(hashcode))
-                    {
 
-                        //System.out.println("The file called "+file_entry.getName()+" doesn't changed.");
+                    String filename_hash = (String) hash_table_for_files.get(hashcode);
+                    String filename_current = (String) file_entry.getName();
 
-                    }
-                    else {
-                        //System.out.println("The file called "+file_entry.getName()+" changed.");
+                    if (!hash_table_for_files.containsKey(hashcode)) {
+
                         changed_files.add(file_entry);
 
                     }
 
                     hash_table_for_files.remove(hashcode);
 
-
                 }
             }
         }
 
-
         return changed_files;
+
     }
+
+
     public static ArrayList<String> get_deleted_filenames() {
+
         try {
             get_data_from_metafile ();
         } catch (IOException e) {
@@ -150,43 +163,53 @@ public class Resources {
         }
 
         ArrayList<File> changed_files =new ArrayList<File>();
-        ArrayList<String> deleted_files=new ArrayList<String>(  );
+        ArrayList<String> deleted_files=new ArrayList<String>();
+
         //get current files
+
         File [] current_files =dir.listFiles();
-        int hashcode =0;
+        int hashcode = 0;
+
         if (current_files != null) {
             for (File file_entry : current_files)
             {
                 //this part is to find added and modified files
+
                 //We dont need to compare metafile
+
                 if(!file_entry.getName().equals("metafile.txt")&&!file_entry.getName().equals(".DS_Store"))
                 {
                     hashcode=file_entry.hashCode();
+
                     //checking whether the file is changed or  not.
-                    String filename_hash=(String) hash_table_for_files.get(hashcode);
-                    String filename_current=(String) file_entry.getName();
+
+                    String filename_hash = (String) hash_table_for_files.get(hashcode);
+                    String filename_current = (String) file_entry.getName();
+
                     if(!hash_table_for_files.containsKey(hashcode))
                         changed_files.add(file_entry);
 
-
                     hash_table_for_files.remove(hashcode);
-
 
                 }
             }
 
         }
 
-
         //this part is for finding deleted files
+
         //if it is not empty it means that there are some deleted files. Because we have deleted all modified and unmodified elements before.
+
         if(!hash_table_for_files .isEmpty())
         {
             //System.out.println("Finding deleted files.");
 
             List<String> list_of_remaining_values = new ArrayList<>(hash_table_for_files.values());
+
             //This iteration is for finding the deleted file.
-            boolean check=true;
+
+            boolean check = true;
+
             for(String name_of_the_file: list_of_remaining_values)
             {
                 for(File changed_file: changed_files)
@@ -195,22 +218,20 @@ public class Resources {
                         check=false;
                     }
                 }
+
                 if(check){
-                    //System.out.println(name_of_the_file+" is deleted.");
+
                     deleted_files.add(name_of_the_file);
+
                 }
 
-                check=true;
+                check = true;
+
             }
 
         }
 
-
         return deleted_files;
-
-
-
-
 
     }
 
@@ -220,39 +241,47 @@ public class Resources {
 
         ArrayList<File> changed_files =get_changes_files();
         ArrayList<String> deleted_files =get_deleted_filenames();
-        String str ="";
+        String str = "";
+
         for(File changed_file: changed_files)
         {
-            str=str+changed_file.getName()+",";
+            str = str + changed_file.getName()+",";
 
         }
+
         for(String deleted_file: deleted_files)
         {
-            str=str+deleted_file+",";
+            str = str + deleted_file+",";
 
         }
+
         if(str.length()>=1){
-            str =str.substring(0,str.length()-1);
+            str = str.substring(0,str.length()-1);
         }
 
         return str;
 
     }
+
 
     public static String get_changes_sizes() {
+
         ArrayList<File> changed_files = get_changes_files();
         ArrayList<String> deleted_files =get_deleted_filenames();
-        String str ="";
+        String str = "";
+
         for(File changed_file: changed_files)
         {
-            str=str+changed_file.length()+",";
+            str=str + changed_file.length()+",";
 
         }
+
         for(String deleted_file: deleted_files)
         {
-            str=str+(-999)+",";
+            str=str + (-999)+",";
 
         }
+
         if(str.length()>=1){
             str =str.substring(0,str.length()-1);
         }
@@ -260,32 +289,33 @@ public class Resources {
         return str;
 
     }
+
 
     public static String get_checksums(){
 
         ArrayList<File> changed_files = get_changes_files();
 
-        String str ="";
+        String str = "";
         for(File changed_file: changed_files)
         {
-            str=str+changed_file.hashCode()+",";
+            str=str + changed_file.hashCode()+",";
 
         }
 
         if(str.length()>=1){
-            str =str.substring(0,str.length()-1);
+            str = str.substring(0,str.length()-1);
         }
 
         return str;
 
-
     }
+
 
     public static String get_checksum_for(String filename){
 
         ArrayList<File> changed_files = get_changes_files();
-        File [] files =dir.listFiles();
-        String str ="";
+        File [] files = dir.listFiles();
+        String str = "";
 
         for(File file: files)
         {
@@ -295,12 +325,9 @@ public class Resources {
 
         }
 
-
         return str;
 
     }
-
-
 
 
     public static void send_files(Socket socket, ArrayList<File> files) {
@@ -337,6 +364,7 @@ public class Resources {
         }
 
     }
+
 
     public static boolean receive_files(Socket socket, String filesToReceive, String size_filesToReceive, String fileChecksums) {
 
@@ -424,8 +452,6 @@ public class Resources {
         return false;
 
     }
-
-
 
 
 

@@ -23,23 +23,11 @@ public class Master_run {
 
             // update with follower
 
-            master.sync_with_follower(10);
+            master.sync_with_follower(5);
 
             // update with drive
 
-            if (Resources.is_changed()) {
-
-                System.out.println("Master : changes are present.");
-
-                // todo : send_to_drive();
-
-            } else {
-
-                System.out.println("Master : changes are not present.");
-
-            }
-
-            // todo : receive_from_drive();
+            master.sync_with_cloud(10);
 
             // end connection
 
