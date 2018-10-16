@@ -262,8 +262,7 @@ public class Resources {
 
         String str = "";
 
-        // todo
-        // not todo for deleted files
+        // todo ; only of valid files
 
         return str;
     }
@@ -338,7 +337,8 @@ public class Resources {
             for (int i = 0; i < files.length; i++){
 
                 String file = files[i];
-                String file_path = path+"test2/"+file;
+
+                String file_path = path+file;
 
                 File file_obj = new File(file_path);
                 file_obj.delete();
@@ -377,7 +377,13 @@ public class Resources {
                     String this_checksum = Resources.get_checksum_for(file);
                     String that_checksum = fileCs[i];
 
-                    if (!this_checksum.equals(that_checksum)) return false;
+//                    if (!this_checksum.equals(that_checksum)) return false;
+
+                    if (!this_checksum.equals(that_checksum)){
+                        System.out.println("Checksum Failed.");
+                        return false;
+                    }
+                    System.out.println("Checksum passed.");
 
                 }
 

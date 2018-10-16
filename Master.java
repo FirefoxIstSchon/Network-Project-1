@@ -36,21 +36,56 @@ public class Master {
 
         int timeout_ms = timeout * 1_000;
 
-        ArrayList<Thread> threads = new ArrayList<>();
-        ArrayList<Command_Listener> followers = new ArrayList<>();
-
-        int follower_count = 0;
-        Command_Listener lastFollower;
-
         // create threads for new followers
 
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                while(true){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                ArrayList<Thread> threads = new ArrayList<>();
+
+                ArrayList<Command_Listener> followers = new ArrayList<>();
+                Command_Listener lastFollower;
+
+                int follower_count = 0;
+                boolean check_cond;
+
+                while(true) {
+
+                    Command_Listener follower_listener = new Command_Listener(serverSocket);
+                    Thread this_thread = new Thread(follower_listener);
+
+                    this_thread.start();
+                    threads.add(this_thread);
+                    followers.add(follower_listener);
+
+                    try {
+                        Thread.sleep(timeout_ms);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    lastFollower = followers.get(followers.size()-1);
+
+                    check_cond = lastFollower.socket != null
+                            && lastFollower.socket.isConnected();
+
+                    if (check_cond) follower_count +=1;
+
+                }
+
+//                ArrayList<Command_Listener> followers = new ArrayList<>();
+//                Command_Listener lastFollower;
 //
 //
+//                followers.add(new Command_Listener(serverSocket));
 //
+//                lastFollower = followers.get(followers.size()-1);
+//
+//                new Thread(lastFollower).start();
+//
+//
+//                while(true) {
 //
 //                    try {
 //                        Thread.sleep(timeout_ms);
@@ -58,48 +93,26 @@ public class Master {
 //                        System.out.println("Master : Main Listener failed.");
 //                    }
 //
-//                    if (lastFollower.socket.isConnected()){
+//                    if (lastFollower.socket != null
+//                            && lastFollower.socket.isConnected()) {
 //
+//                        followers.add(new Command_Listener(serverSocket));
+//                        lastFollower = followers.get(followers.size()-1);
+//                        new Thread(lastFollower).start();
+//                    }
 //                }
-//            }
-//        }).start();
-
-
-        boolean check_cond;
-
-        do {
-
-            Command_Listener follower_listener = new Command_Listener(serverSocket);
-            Thread this_thread = new Thread(follower_listener);
-
-            this_thread.start();
-            threads.add(this_thread);
-            followers.add(follower_listener);
-
-            try {
-                Thread.sleep(timeout_ms);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
-
-            lastFollower = followers.get(followers.size()-1);
-
-            check_cond = lastFollower.socket != null
-                    && lastFollower.socket.isConnected();
-
-            if (check_cond) follower_count +=1;
-
-        } while(check_cond);
+        }).start();
 
         // handle existing threads
 
-        for (int i = 0; i < follower_count; i++){
-            Thread this_thread = threads.get(i);
-            try {
-                this_thread.join();
-            } catch (InterruptedException e) {
-                System.out.println("Master : Thread join error."); }
-        }
+//        for (int i = 0; i < follower_count; i++){
+//            Thread this_thread = threads.get(i);
+//            try {
+//                this_thread.join();
+//            } catch (InterruptedException e) {
+//                System.out.println("Master : Thread join error."); }
+//        }
 
     }
 

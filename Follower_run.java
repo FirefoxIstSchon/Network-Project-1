@@ -91,10 +91,10 @@ public class Follower_run {
             String fileChecksums = follower.get_response();
 
             success = Resources.receive_files(
-                    follower.socket,
-                    filesToReceive,
-                    size_filesToReceive,
-                    fileChecksums);
+                        follower.socket,
+                        filesToReceive,
+                        size_filesToReceive,
+                        fileChecksums);
 
         } while (!success);
 
