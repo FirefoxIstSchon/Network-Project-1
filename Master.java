@@ -90,6 +90,13 @@ public class Master {
     }
 
 
+    public void sync_with_cloud(int timeout){
+
+        new Thread(new Drive_Listener(timeout)).start();
+
+    }
+
+
     public void terminate_connection() {
 
         try {
@@ -214,4 +221,39 @@ class Command_Listener implements Runnable{
 
     }
 
+}
+
+
+class Drive_Listener implements Runnable{
+
+    int timeout_ms;
+
+    public Drive_Listener(int timeout) { this.timeout_ms = timeout * 1_000; }
+
+    @Override
+    public void run() {
+
+        while (true) {
+
+            if (Resources.is_changed()) {
+
+                System.out.println("Master : changes are present.");
+
+                // todo : send_to_drive();
+
+            } else {
+
+                System.out.println("Master : changes are not present.");
+
+            }
+
+            // todo : receive_from_drive();
+
+            try {
+                Thread.sleep(timeout_ms);
+            } catch (InterruptedException e) { System.out.println("Master : Drive thread interrupted"); }
+
+        }
+
+    }
 }
