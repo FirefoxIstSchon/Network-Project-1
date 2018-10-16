@@ -6,17 +6,21 @@ import java.net.Socket;
 public class Follower {
 
 
-    Socket socket;
+    Socket socket_files;
+    Socket socket_commands;
+
     BufferedReader reader;
     PrintWriter writer;
 
     String SERVER_ADDRESS;
-    int SERVER_PORT;
+    int SERVER_PORT_files;
+    int SERVER_PORT_commands;
 
 
-    public Follower(String SERVER_ADDRESS, int SERVER_PORT){
+    public Follower(String SERVER_ADDRESS, int SERVER_PORT_files, int SERVER_PORT_commands){
         this.SERVER_ADDRESS = SERVER_ADDRESS;
-        this.SERVER_PORT = SERVER_PORT;
+        this.SERVER_PORT_files = SERVER_PORT_files;
+        this.SERVER_PORT_commands = SERVER_PORT_commands;
     }
 
 
@@ -28,9 +32,12 @@ public class Follower {
 
             try {
 
-                socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
-                reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                writer = new PrintWriter(socket.getOutputStream());
+                socket_files = new Socket(SERVER_ADDRESS, SERVER_PORT_files);
+                socket_commands = new Socket(SERVER_ADDRESS, SERVER_PORT_commands);
+
+
+                reader = new BufferedReader(new InputStreamReader(socket_commands.getInputStream()));
+                writer = new PrintWriter(socket_commands.getOutputStream());
 
                 is_init = true;
 
@@ -91,7 +98,8 @@ public class Follower {
 
         try {
 
-            if (socket!= null) {socket.close();}
+            if (socket_commands != null) {socket_commands.close();}
+            if (socket_files != null) {socket_files.close();}
             if (reader != null) {reader.close();}
             if (writer != null) {writer.close();}
 

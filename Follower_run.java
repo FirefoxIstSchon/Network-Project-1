@@ -4,17 +4,18 @@ public class Follower_run {
 
 
     static String SERVER_ADDRESS = "localhost";
-    static int SERVER_PORT = 4444;
+    static int SERVER_PORT_files = 4444;
+    static int SERVER_PORT_commands = 4443;
 
     static Follower follower;
 
 
     public static void main(String[] args){
 
-        follower = new Follower(SERVER_ADDRESS, SERVER_PORT);
+        follower = new Follower(SERVER_ADDRESS, SERVER_PORT_files, SERVER_PORT_commands);
         follower.initialize_connection();
 
-        if (follower.socket == null) {
+        if (follower.socket_files == null || follower.socket_commands == null) {
 
             System.out.println("Follower : connectivity is not established.");
 
@@ -69,7 +70,7 @@ public class Follower_run {
             follower.send_command(Resources.get_changes_sizes());
             follower.send_command(Resources.get_checksums());
 
-            Resources.send_files(follower.socket, Resources.get_changes_files());
+            Resources.send_files(follower.socket_files, Resources.get_changes_files());
 
         } while (!follower.get_response().equals("MasterReceived"));
 
@@ -91,7 +92,7 @@ public class Follower_run {
             String fileChecksums = follower.get_response();
 
             success = Resources.receive_files(
-                        follower.socket,
+                        follower.socket_files,
                         filesToReceive,
                         size_filesToReceive,
                         fileChecksums);
