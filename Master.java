@@ -222,6 +222,16 @@ class Command_Listener implements Runnable{
 
             System.out.println("Master : finished interaction with client.");
 
+            try {
+
+                Resources.create_metafile();
+
+            } catch (IOException e) {
+
+                System.out.println("Master : could not create metafile.");
+
+            }
+
         } catch (IOException e) {
 
             System.out.println("Master : Transaction failed");
