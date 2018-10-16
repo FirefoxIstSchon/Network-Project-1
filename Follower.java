@@ -22,17 +22,40 @@ public class Follower {
 
     public void initialize_connection() {
 
-        try {
+        boolean is_init = false;
 
-            socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
-            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            writer = new PrintWriter(socket.getOutputStream());
+        do {
 
-        } catch (IOException e) {
+            try {
 
-            System.out.println("Follower : Creation error.");
+                socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
+                reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                writer = new PrintWriter(socket.getOutputStream());
 
-        }
+                is_init = true;
+
+            } catch (IOException e) {
+
+                System.out.println("Follower : Creation error.");
+
+            }
+
+            if (!is_init) {
+
+                try {
+
+                    Thread.sleep(5*1_000);
+
+                } catch (InterruptedException e) {
+
+                    System.out.println("Follower : Suspend error.");
+
+                }
+
+
+            }
+
+        } while(!is_init);
 
     }
 

@@ -1,6 +1,4 @@
-
 import java.io.*;
-
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -15,12 +13,12 @@ public class Master {
 
 
     public Master(int SERVER_PORT){
-
         this.SERVER_PORT = SERVER_PORT;
     }
 
 
     public void initialize_connection(){
+
         try {
 
             serverSocket = new ServerSocket(SERVER_PORT);
@@ -100,8 +98,7 @@ public class Master {
             try {
                 this_thread.join();
             } catch (InterruptedException e) {
-                System.out.println("Master : Thread join error.");
-            }
+                System.out.println("Master : Thread join error."); }
         }
 
     }

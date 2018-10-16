@@ -3,8 +3,9 @@ import java.io.IOException;
 public class Follower_run {
 
 
-    static String SERVER_ADDRESS = "localhost"; //"192.168.1.20";
+    static String SERVER_ADDRESS = "localhost";
     static int SERVER_PORT = 4444;
+
     static Follower follower;
 
 
