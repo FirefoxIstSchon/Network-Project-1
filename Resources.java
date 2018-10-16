@@ -15,8 +15,8 @@ import java.io.*;
 
 
 public class Resources {
-    public static String path ="/Users/k/git/Network-Project-1/";
-    public static String foldername="testfolderforsync/";
+    public static String path ="C:\\Users\\Berke\\Documents\\School\\Courses\\Comp\\416\\Projects\\P1\\";
+    public static String foldername="testfolderforsync\\";
     public static File dir =new File (path+foldername);
     public static Hashtable hash_table_for_files=new Hashtable();
 
@@ -77,7 +77,7 @@ public class Resources {
                 //adding hashcode to the meta file to compare files later on
                 hashcode=file_entry.hashCode();
                 str=str+file_entry.getName()+ " ";
-                if(!str.contains("metafile.txt ")){
+                if(!str.contains("metafile.txt")&&!str.contains(".DS_Store")){
                     //System.out.println(file_entry.getName());
                     str=str+hashcode;
                     printWriter.println(str);
@@ -365,6 +365,8 @@ public class Resources {
 
                 File file_obj = new File(file_path);
                 file_obj.delete();
+
+
 
                 if (!filesSize[i].equals("-999") && filesSize[i].length()!=0) {
 
