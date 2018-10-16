@@ -366,7 +366,7 @@ public class Resources {
     }
 
 
-    public static boolean receive_files(Socket socket, String filesToReceive, String size_filesToReceive, String fileChecksums) {
+    public static boolean receive_files(Socket socket, String filesToReceive, String size_filesToReceive) {
 
         InputStream inputStream;
         FileOutputStream fileOutputStream;
@@ -374,7 +374,7 @@ public class Resources {
 
         String[] files = filesToReceive.split(",");
         String[] filesSize = size_filesToReceive.split(",");
-        String[] fileCs = fileChecksums.split(",");
+        // String[] fileCs = fileChecksums.split(",");
 
         int currentPtr = 0;
         int readBytes;
@@ -429,15 +429,9 @@ public class Resources {
                     bufferedOutputStream.close();
                     fileOutputStream.close();
 
-                    String this_checksum = Resources.get_checksum_for(file);
-                    String that_checksum = fileCs[i];
+                    //String this_checksum = Resources.get_checksum_for(file);
+                    //String that_checksum = fileCs[i];
 //                    if (!this_checksum.equals(that_checksum)) return false;
-
-                    if (!this_checksum.equals(that_checksum)){
-                        System.out.println("Checksum Failed."+" "+this_checksum+" "+that_checksum);
-                        //return true; // todo : implement checksum
-                }
-                    System.out.println("Checksum passed.");
 
                 }
 
