@@ -1,19 +1,19 @@
-import java.io.IOException;
 
 
 public class Master_run {
 
 
-    static int SERVER_PORT_files = 4444;
-    static int SERVER_PORT_commands = 4443;
+    static int SERVER_PORT = 4444;
 
 
     public static void main(String[] args){
 
-        Master master = new Master(SERVER_PORT_files, SERVER_PORT_commands);
+        // create a master (server) instance
+
+        Master master = new Master(SERVER_PORT);
         master.initialize_connection();
 
-        if (master.serverSocket_files == null || master.serverSocket_commands == null) {
+        if (master.serverSocket == null) {
 
             System.out.println("Master : connectivity is not established.");
 
@@ -48,7 +48,6 @@ public class Master_run {
 //            try {
 //
 //                Resources.create_metafile();
-//
 //
 //            } catch (IOException e) {
 //

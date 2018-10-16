@@ -6,21 +6,17 @@ import java.net.Socket;
 public class Follower {
 
 
-    Socket socket_files;
-    Socket socket_commands;
-
+    Socket socket;
     BufferedReader reader;
     PrintWriter writer;
 
     String SERVER_ADDRESS;
-    int SERVER_PORT_files;
-    int SERVER_PORT_commands;
+    int SERVER_PORT;
 
 
-    public Follower(String SERVER_ADDRESS, int SERVER_PORT_files, int SERVER_PORT_commands){
+    public Follower(String SERVER_ADDRESS, int SERVER_PORT){
         this.SERVER_ADDRESS = SERVER_ADDRESS;
-        this.SERVER_PORT_files = SERVER_PORT_files;
-        this.SERVER_PORT_commands = SERVER_PORT_commands;
+        this.SERVER_PORT = SERVER_PORT;
     }
 
 
@@ -32,11 +28,9 @@ public class Follower {
 
             try {
 
-                socket_files = new Socket(SERVER_ADDRESS, SERVER_PORT_files);
-                socket_commands = new Socket(SERVER_ADDRESS, SERVER_PORT_commands);
-
-                reader = new BufferedReader(new InputStreamReader(socket_commands.getInputStream()));
-                writer = new PrintWriter(socket_commands.getOutputStream());
+                socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
+                reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                writer = new PrintWriter(socket.getOutputStream());
 
                 is_init = true;
 
@@ -57,7 +51,6 @@ public class Follower {
                     System.out.println("Follower : Suspend error.");
 
                 }
-
 
             }
 
@@ -97,8 +90,7 @@ public class Follower {
 
         try {
 
-            if (socket_commands != null) {socket_commands.close();}
-            if (socket_files != null) {socket_files.close();}
+            if (socket!= null) {socket.close();}
             if (reader != null) {reader.close();}
             if (writer != null) {writer.close();}
 

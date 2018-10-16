@@ -7,16 +7,13 @@ import java.util.ArrayList;
 public class Master {
 
 
-    ServerSocket serverSocket_files;
-    ServerSocket serverSocket_commands;
+    ServerSocket serverSocket;
 
-    int SERVER_PORT_files;
-    int SERVER_PORT_commands;
+    int SERVER_PORT;
 
 
-    public Master(int SERVER_PORT_files, int SERVER_PORT_commands){
-        this.SERVER_PORT_files = SERVER_PORT_files;
-        this.SERVER_PORT_commands = SERVER_PORT_commands;
+    public Master(int SERVER_PORT){
+        this.SERVER_PORT = SERVER_PORT;
     }
 
 
@@ -24,8 +21,7 @@ public class Master {
 
         try {
 
-            serverSocket_files = new ServerSocket(SERVER_PORT_files);
-            serverSocket_commands = new ServerSocket(SERVER_PORT_commands);
+            serverSocket = new ServerSocket(SERVER_PORT);
 
         } catch (IOException e) {
 
@@ -56,7 +52,7 @@ public class Master {
 
                 while(true) {
 
-                    Command_Listener follower_listener = new Command_Listener(serverSocket_commands, serverSocket_files);
+                    Command_Listener follower_listener = new Command_Listener(serverSocket);
                     Thread this_thread = new Thread(follower_listener);
 
                     this_thread.start();
@@ -71,43 +67,13 @@ public class Master {
 
                     lastFollower = followers.get(followers.size()-1);
 
-                    check_cond =
-                            lastFollower.socket_commands != null &&
-                                    lastFollower.serverSocket_files != null &&
-                                    lastFollower.socket_files.isConnected() &&
-                                    lastFollower.socket_commands.isConnected();
+                    check_cond = lastFollower.socket != null
+                            && lastFollower.socket.isConnected();
 
                     if (check_cond) follower_count +=1;
 
                 }
 
-//                ArrayList<Command_Listener> followers = new ArrayList<>();
-//                Command_Listener lastFollower;
-//
-//
-//                followers.add(new Command_Listener(serverSocket));
-//
-//                lastFollower = followers.get(followers.size()-1);
-//
-//                new Thread(lastFollower).start();
-//
-//
-//                while(true) {
-//
-//                    try {
-//                        Thread.sleep(timeout_ms);
-//                    } catch (InterruptedException e) {
-//                        System.out.println("Master : Main Listener failed.");
-//                    }
-//
-//                    if (lastFollower.socket != null
-//                            && lastFollower.socket.isConnected()) {
-//
-//                        followers.add(new Command_Listener(serverSocket));
-//                        lastFollower = followers.get(followers.size()-1);
-//                        new Thread(lastFollower).start();
-//                    }
-//                }
             }
         }).start();
 
@@ -128,10 +94,7 @@ public class Master {
 
         try {
 
-            if (serverSocket_files != null){
-                serverSocket_files.close();}
-            if (serverSocket_commands != null){
-                serverSocket_commands.close();}
+            if (serverSocket != null){serverSocket.close();}
 
         } catch (IOException e) {
 
@@ -150,32 +113,29 @@ public class Master {
 
 class Command_Listener implements Runnable{
 
-    ServerSocket serverSocket_files;
-    ServerSocket serverSocket_commands;
+    ServerSocket serverSocket;
 
     BufferedReader reader;
     PrintWriter writer;
-    Socket socket_files;
-    Socket socket_commands;
+    Socket socket;
 
 
-    public Command_Listener(ServerSocket serverSocket_files, ServerSocket serverSocket_commands){
-        this.serverSocket_files = serverSocket_files;
-        this.serverSocket_commands = serverSocket_commands;
-    }
+    public Command_Listener(ServerSocket serverSocket){ this.serverSocket = serverSocket; }
 
     @Override
     public void run() {
 
         try {
 
-            socket_files = serverSocket_files.accept();
-            socket_commands = serverSocket_commands.accept();
+            // prepares to listen for commands
 
-            reader = new BufferedReader(new InputStreamReader(socket_commands.getInputStream()));
-            writer = new PrintWriter(socket_files.getOutputStream());
+            socket = serverSocket.accept();
+            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            writer = new PrintWriter(socket.getOutputStream());
 
             String command = reader.readLine();
+
+            // listen for commands until follower sends "ClientDone"
 
             while(!command.equals("ClientDone")) {
 
@@ -183,29 +143,16 @@ class Command_Listener implements Runnable{
 
                     case "ClientSend":
 
+                        // follower sends until master reports success
+
                         System.out.println("Master : is receiving..");
 
                         String filesToReceive = reader.readLine();
                         String size_filesToReceive = reader.readLine();
                         String checksum_filesToReceive = reader.readLine();
 
-
-//                        boolean success;
-//
-//                        do {
-//
-//                            success = Resources.receive_files(socket, filesToReceive, size_filesToReceive, checksum_filesToReceive);
-//                            if (success) {
-//
-//                                writer.println("MasterReceived");
-//                                writer.flush();
-//
-//                            }
-//
-//                        } while (!success);
-
                         if (Resources.receive_files(
-                                socket_files,
+                                socket,
                                 filesToReceive,
                                 size_filesToReceive,
                                 checksum_filesToReceive
@@ -219,6 +166,8 @@ class Command_Listener implements Runnable{
 
                     case "ClientReceive":
 
+                        // follower requests changes until success
+
                         System.out.println("Master : is sending..");
 
                         writer.println(Resources.get_changes_names());
@@ -226,9 +175,11 @@ class Command_Listener implements Runnable{
                         writer.println(Resources.get_checksums());
                         writer.flush();
 
-                        Resources.send_files(socket_files, Resources.get_changes_files());
+                        Resources.send_files(socket, Resources.get_changes_files());
 
                         try {
+
+                            // after files are received, metafile is created wrt changes
 
                             Resources.create_metafile();
 
@@ -250,6 +201,8 @@ class Command_Listener implements Runnable{
                 command = reader.readLine();
 
             }
+
+            // single client is done interacting
 
             System.out.println("Master : finished interaction with client.");
 
