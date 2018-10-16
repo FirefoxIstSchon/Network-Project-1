@@ -281,19 +281,17 @@ public class Resources {
     public static String get_checksum_for(String filename){
 
         ArrayList<File> changed_files = get_changes_files();
-
+        File [] files =dir.listFiles();
         String str ="";
-        for(File changed_file: changed_files)
+
+        for(File file: files)
         {
-            if(changed_file.getName().equals(filename)){
-                str=str+changed_file.hashCode();
+            if(file.getName().equals(filename)){
+                str=str+file.hashCode();
             }
 
         }
 
-        if(str.length()>=1){
-            str =str.substring(0,str.length()-1);
-        }
 
         return str;
 
