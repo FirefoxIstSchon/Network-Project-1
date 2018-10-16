@@ -44,6 +44,17 @@ public class Master_run {
 
             // master.terminate_connection();
 
+            try {
+
+                Resources.create_metafile();
+
+
+            } catch (IOException e) {
+
+                System.out.println("Master : could not create metafile.");
+
+            }
+
         }
 
     }

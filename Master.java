@@ -192,7 +192,10 @@ class Command_Listener implements Runnable{
                                 size_filesToReceive,
                                 checksum_filesToReceive
                             )
-                        ) { writer.println("MasterReceived") ; writer.flush() ; }
+                        ) { writer.println("MasterReceived"); }
+                        else { writer.println(); }
+
+                        writer.flush();
 
                         break;
 

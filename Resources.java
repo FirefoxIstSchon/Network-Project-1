@@ -15,8 +15,8 @@ import java.io.*;
 
 
 public class Resources {
-    public static String path ="C:\\Users\\Berke\\Documents\\School\\Courses\\Comp\\416\\Projects\\P1\\";
-    public static String foldername="testfolderforsync\\";
+    public static String path ="/Users/k/git/Network-Project-1/";
+    public static String foldername="testfolderforsync/";
     public static File dir =new File (path+foldername);
     public static Hashtable hash_table_for_files=new Hashtable();
 
@@ -360,7 +360,7 @@ public class Resources {
 
                 String file = files[i];
 
-                String file_path = path+file;
+                String file_path = path+foldername+file;
 
                 File file_obj = new File(file_path);
                 file_obj.delete();
@@ -376,6 +376,8 @@ public class Resources {
                     readBytes = inputStream.read(byteArr, 0, byteArr.length);
                     currentPtr = readBytes;
 
+                    System.out.println("Receiving file..");
+
                     do {
 
                         int newPtr = byteArr.length - currentPtr;
@@ -384,11 +386,11 @@ public class Resources {
 
                         if (readBytes > 0) currentPtr += readBytes;
 
-                        //System.out.println(readBytes);
+                        // System.out.println(readBytes);
 
                     } while (readBytes != 0);
 
-                    //System.out.println("reach");
+                    System.out.println("Received file.");
 
                     bufferedOutputStream.write(byteArr, 0, currentPtr);
                     bufferedOutputStream.flush();
@@ -402,7 +404,7 @@ public class Resources {
 //                    if (!this_checksum.equals(that_checksum)) return false;
 
                     if (!this_checksum.equals(that_checksum)){
-                        System.out.println("Checksum Failed.");
+                        System.out.println("Checksum Failed."+" "+this_checksum+ " "+that_checksum);
                         return false;
                     }
                     System.out.println("Checksum passed.");
