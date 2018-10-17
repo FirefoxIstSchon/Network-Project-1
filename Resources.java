@@ -15,10 +15,11 @@ import java.io.*;
 
 
 public class Resources {
-    public static String path = "/Users/k/git/Network-Project-1/";
-    public static String foldername = "testfolderforsync/";
+    public static String path = "C:\\Users\\Berke\\Desktop\\";
+    public static String foldername = "DriveCloud\\";
     public static File dir = new File (path+foldername);
     public static Hashtable hash_table_for_files = new Hashtable();
+
 
     public Resources(){}
 
@@ -51,7 +52,7 @@ public class Resources {
         Scanner sc = new Scanner(metafile);
         while (sc.hasNextLine()){
             String[] line =sc.nextLine().split(" ");
-            hash_table_for_files.put(Integer.parseInt(line[1]), line[0]);
+            hash_table_for_files.put(line[0],Long.parseLong(line[1]));
         }
     }
 
@@ -78,7 +79,7 @@ public class Resources {
         File [] files = dir.listFiles();
         FileWriter fileWriter = new FileWriter(metafile);
         PrintWriter printWriter = new PrintWriter(fileWriter);
-        int hashcode = -1;
+        long hashcode = -1;
         String str = "";
         for (File file_entry : files)
         {
@@ -86,7 +87,7 @@ public class Resources {
 
                 // adding hashcode to the meta file to compare files later on
 
-                hashcode=file_entry.hashCode();
+                hashcode=file_entry.lastModified();
                 str=str+file_entry.getName()+ " ";
                 if(!str.contains("metafile.txt")&&!str.contains(".DS_Store")){
 
@@ -119,7 +120,7 @@ public class Resources {
         //get current files
 
         File [] current_files =dir.listFiles();
-        int hashcode = 0;
+        long hashcode = 0;
         if (current_files != null) {
 
             //this part is to find added and modified files
@@ -128,19 +129,19 @@ public class Resources {
             {
                 //We dont need to compare metafile
 
+
                 if(!file_entry.getName().equals("metafile.txt")&&!file_entry.getName().equals(".DS_Store"))
                 {
-                    hashcode=file_entry.hashCode();
 
-                    //checking whether the file is changed or  not.
+                    hashcode=file_entry.lastModified();
 
-                    String filename_hash = (String) hash_table_for_files.get(hashcode);
-                    String filename_current = (String) file_entry.getName();
-
-                    if (!hash_table_for_files.containsKey(hashcode)) {
-
+                    if (hash_table_for_files.containsKey(file_entry.getName()) && (long)hash_table_for_files.get(file_entry.getName())!=hashcode) {
+                        System.out.println("Modified file "+file_entry.getName());
                         changed_files.add(file_entry);
 
+                    }else if(!hash_table_for_files.containsKey(file_entry.getName())){
+                        System.out.println("Added file "+file_entry.getName());
+                        changed_files.add(file_entry);
                     }
 
                     hash_table_for_files.remove(hashcode);
@@ -168,7 +169,7 @@ public class Resources {
         //get current files
 
         File [] current_files =dir.listFiles();
-        int hashcode = 0;
+        long hashcode = 0;
 
         if (current_files != null) {
             for (File file_entry : current_files)
@@ -179,17 +180,20 @@ public class Resources {
 
                 if(!file_entry.getName().equals("metafile.txt")&&!file_entry.getName().equals(".DS_Store"))
                 {
-                    hashcode=file_entry.hashCode();
 
-                    //checking whether the file is changed or  not.
+                    hashcode=file_entry.lastModified();
 
-                    String filename_hash = (String) hash_table_for_files.get(hashcode);
-                    String filename_current = (String) file_entry.getName();
-
-                    if(!hash_table_for_files.containsKey(hashcode))
+                    if (hash_table_for_files.containsKey(file_entry.getName()) && (long)hash_table_for_files.get(file_entry.getName())!=hashcode) {
+                        System.out.println("Modified file "+file_entry.getName());
                         changed_files.add(file_entry);
 
-                    hash_table_for_files.remove(hashcode);
+                    }else if(!hash_table_for_files.containsKey(file_entry.getName())){
+                        System.out.println("Added file "+file_entry.getName());
+                        changed_files.add(file_entry);
+                    }
+
+                    hash_table_for_files.remove(file_entry.getName());
+
 
                 }
             }
@@ -458,14 +462,14 @@ public class Resources {
     public static void main(String[] args) throws IOException,InterruptedException
     {
 
-        //create_metafile();
-        get_data_from_metafile ();
+        //
+        //get_data_from_metafile ();
         //Thread.sleep(30*1000);
         ArrayList<File> test = get_changes_files();
-        ArrayList<String> test2 = get_deleted_filenames();
-        get_changes_names();
-        get_changes_sizes();
-
+        //ArrayList<String> test2 = get_deleted_filenames();
+        //get_changes_names();
+        //get_changes_sizes();
+        create_metafile();
     }
 
 

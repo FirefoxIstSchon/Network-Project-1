@@ -129,7 +129,7 @@ class Master_Connecter implements Runnable{
                 System.out.println("Follower : could not create metafile");
             }
 
-            follower.send_command("ClientDone");
+            //follower.send_command("ClientDone");
 
             try {
                 Thread.sleep(timeout_ms);
