@@ -156,14 +156,11 @@ class Command_Listener implements Runnable{
 
                         String filesToReceive = reader.readLine();
                         String size_filesToReceive = reader.readLine();
-                        String checksum_filesToReceive = reader.readLine();
 
                         if (Resources.receive_files(
                                 socket,
                                 filesToReceive,
-                                size_filesToReceive,
-                                checksum_filesToReceive
-                            )
+                                size_filesToReceive)
                         ) { writer.println("MasterReceived"); }
                         else { writer.println(""); }
 
@@ -179,7 +176,6 @@ class Command_Listener implements Runnable{
 
                         writer.println(Resources.get_changes_names());
                         writer.println(Resources.get_changes_sizes());
-                        writer.println(Resources.get_checksums());
                         writer.flush();
 
                         Resources.send_files(socket, Resources.get_changes_files());
