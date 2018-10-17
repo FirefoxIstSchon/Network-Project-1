@@ -15,8 +15,8 @@ import java.io.*;
 
 
 public class Resources {
-    public static String path = "C:\\Users\\Berke\\Desktop\\";
-    public static String foldername = "DriveCloud\\";
+    public static String path = "/Users/k/git/Network-Project-1/";
+    public static String foldername = "DriveCloud/";
     public static File dir = new File (path+foldername);
     public static Hashtable hash_table_for_files = new Hashtable();
 
@@ -136,11 +136,11 @@ public class Resources {
                     hashcode=file_entry.lastModified();
 
                     if (hash_table_for_files.containsKey(file_entry.getName()) && (long)hash_table_for_files.get(file_entry.getName())!=hashcode) {
-                        System.out.println("Modified file "+file_entry.getName());
+                        // System.out.println("Modified file "+file_entry.getName());
                         changed_files.add(file_entry);
 
                     }else if(!hash_table_for_files.containsKey(file_entry.getName())){
-                        System.out.println("Added file "+file_entry.getName());
+                        // System.out.println("Added file "+file_entry.getName());
                         changed_files.add(file_entry);
                     }
 
@@ -355,7 +355,7 @@ public class Resources {
                 fileInputStream.close();
 
             } catch (Exception e) {
-                System.out.println("Send Error:"+e);
+                // System.out.println("Send Error:"+e);
             }
 
         }
@@ -404,8 +404,6 @@ public class Resources {
                     readBytes = inputStream.read(byteArr, 0, byteArr.length);
                     currentPtr = readBytes;
 
-                    System.out.println("Receiving file..");
-
                     do {
 
                         int newPtr = byteArr.length - currentPtr;
@@ -418,7 +416,6 @@ public class Resources {
 
                     } while (readBytes != 0);
 
-                    System.out.println("Received file.");
                     bufferedOutputStream.write(byteArr, 0, currentPtr);
 
                     bufferedOutputStream.flush();

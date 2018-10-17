@@ -38,43 +38,40 @@ public class Master {
 
         // create threads for new followers
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+        new Thread(() -> {
 
-                ArrayList<Thread> threads = new ArrayList<>();
+            ArrayList<Thread> threads = new ArrayList<>();
 
-                ArrayList<Command_Listener> followers = new ArrayList<>();
-                Command_Listener lastFollower;
+            ArrayList<Command_Listener> followers = new ArrayList<>();
+            Command_Listener lastFollower;
 
-                int follower_count = 0;
-                boolean check_cond;
+            int follower_count = 0;
+            boolean check_cond;
 
-                while(true) {
+            while(true) {
 
-                    Command_Listener follower_listener = new Command_Listener(serverSocket);
-                    Thread this_thread = new Thread(follower_listener);
+                Command_Listener follower_listener = new Command_Listener(serverSocket);
+                Thread this_thread = new Thread(follower_listener);
 
-                    this_thread.start();
-                    threads.add(this_thread);
-                    followers.add(follower_listener);
+                this_thread.start();
+                threads.add(this_thread);
+                followers.add(follower_listener);
 
-                    try {
-                        Thread.sleep(timeout_ms);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                    lastFollower = followers.get(followers.size()-1);
-
-                    check_cond = lastFollower.socket != null
-                            && lastFollower.socket.isConnected();
-
-                    if (check_cond) follower_count +=1;
-
+                try {
+                    Thread.sleep(timeout_ms);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
 
+                lastFollower = followers.get(followers.size()-1);
+
+                check_cond = lastFollower.socket != null
+                        && lastFollower.socket.isConnected();
+
+                if (check_cond) follower_count +=1;
+
             }
+
         }).start();
 
         // handle existing threads
@@ -152,8 +149,6 @@ class Command_Listener implements Runnable{
 
                         // follower sends until master reports success
 
-                        System.out.println("Master : is receiving..");
-
                         String filesToReceive = reader.readLine();
                         String size_filesToReceive = reader.readLine();
 
@@ -171,8 +166,6 @@ class Command_Listener implements Runnable{
                     case "ClientReceive":
 
                         // follower requests changes until success
-
-                        System.out.println("Master : is sending..");
 
                         writer.println(Resources.get_changes_names());
                         writer.println(Resources.get_changes_sizes());
