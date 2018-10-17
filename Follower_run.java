@@ -63,7 +63,7 @@ class Master_Connecter implements Runnable{
                 // send files only if changes are present
 
                 System.out.println("Follower : changes are present.");
-
+                String str="";
                 do {
 
                     System.out.println("Follower : is sending..");
@@ -78,11 +78,15 @@ class Master_Connecter implements Runnable{
                     //send changes until success
 
                     Resources.send_files(follower.socket, Resources.get_changes_files());
-                    System.out.println("Follower send files.");
 
-                } while (!follower.get_response().equals("MasterReceived"));
+                    str =follower.get_response();
 
+
+                } while (!str.equals("MasterReceived"));
+
+                System.out.println("reach");
                 System.out.flush();
+
 
             } else {
 

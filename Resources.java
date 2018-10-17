@@ -184,11 +184,9 @@ public class Resources {
                     hashcode=file_entry.lastModified();
 
                     if (hash_table_for_files.containsKey(file_entry.getName()) && (long)hash_table_for_files.get(file_entry.getName())!=hashcode) {
-                        System.out.println("Modified file "+file_entry.getName());
                         changed_files.add(file_entry);
 
                     }else if(!hash_table_for_files.containsKey(file_entry.getName())){
-                        System.out.println("Added file "+file_entry.getName());
                         changed_files.add(file_entry);
                     }
 
@@ -208,31 +206,24 @@ public class Resources {
         {
             //System.out.println("Finding deleted files.");
 
-            List<String> list_of_remaining_values = new ArrayList<>(hash_table_for_files.values());
-
             //This iteration is for finding the deleted file.
-
-            boolean check = true;
-
-            for(String name_of_the_file: list_of_remaining_values)
+            for(File file: current_files)
             {
-                for(File changed_file: changed_files)
+                if(hash_table_for_files.containsKey(file.getName()))
                 {
-                    if(changed_file.getName().contains(name_of_the_file)){
-                        check=false;
-                    }
+                    hash_table_for_files.remove(file.getName());
                 }
 
-                if(check){
-
-                    deleted_files.add(name_of_the_file);
-
-                }
-
-                check = true;
 
             }
 
+        }
+        if(!hash_table_for_files .isEmpty())
+        {
+            for (Object deletedfile: hash_table_for_files.keySet()){
+                deleted_files.add((String)deletedfile);
+
+            }
         }
 
         return deleted_files;
@@ -356,8 +347,10 @@ public class Resources {
                 outputStream = socket.getOutputStream();
                 outputStream.write(byteArray, 0, byteArrayLen);
                 System.out.flush();
+
                 outputStream.flush();
                 System.out.flush();
+
                 bufferedInputStream.close();
                 fileInputStream.close();
 
@@ -460,10 +453,10 @@ public class Resources {
         //get_data_from_metafile ();
         //Thread.sleep(30*1000);
         ArrayList<File> test = get_changes_files();
-        //ArrayList<String> test2 = get_deleted_filenames();
+        ArrayList<String> test2 = get_deleted_filenames();
         //get_changes_names();
         //get_changes_sizes();
-        create_metafile();
+        //create_metafile();
     }
 
 
